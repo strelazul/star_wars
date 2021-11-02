@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_01_133043) do
+ActiveRecord::Schema.define(version: 2021_11_02_034736) do
+
+  create_table "films", force: :cascade do |t|
+    t.string "title"
+    t.integer "episode_id"
+    t.text "opening_crawl"
+    t.string "director"
+    t.string "producer"
+    t.date "release_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "people", force: :cascade do |t|
     t.string "name"
