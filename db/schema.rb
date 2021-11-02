@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_02_034736) do
+ActiveRecord::Schema.define(version: 2021_11_02_041740) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -32,6 +32,23 @@ ActiveRecord::Schema.define(version: 2021_11_02_034736) do
     t.integer "height"
     t.integer "mass"
     t.string "skin_color"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "starships", force: :cascade do |t|
+    t.string "name"
+    t.string "model"
+    t.string "manufacturer"
+    t.integer "cost_in_credits"
+    t.float "length"
+    t.string "crew"
+    t.string "passengers"
+    t.string "max_atmosphering_speed"
+    t.string "hyperdrive_rating"
+    t.string "MGLT"
+    t.string "cargo_capacity"
+    t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
