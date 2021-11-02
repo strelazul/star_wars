@@ -9,7 +9,8 @@ class CreateVehicles < ActiveRecord::Migration[6.1]
       t.string :crew
       t.string :passengers
       t.string :max_atmosphering_speed
-      t.stringconsumables :cargo_capacity
+      t.string :cargo_capacity
+      t.string :consumables
 
       t.timestamps
     end

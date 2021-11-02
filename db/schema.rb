@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_02_041740) do
+ActiveRecord::Schema.define(version: 2021_11_02_130742) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -47,6 +47,21 @@ ActiveRecord::Schema.define(version: 2021_11_02_041740) do
     t.string "max_atmosphering_speed"
     t.string "hyperdrive_rating"
     t.string "MGLT"
+    t.string "cargo_capacity"
+    t.string "consumables"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "vehicles", force: :cascade do |t|
+    t.string "name"
+    t.string "model"
+    t.string "manufacturer"
+    t.string "length"
+    t.string "const_in_credits"
+    t.string "crew"
+    t.string "passengers"
+    t.string "max_atmosphering_speed"
     t.string "cargo_capacity"
     t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
