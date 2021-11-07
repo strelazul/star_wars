@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_07_014612) do
+ActiveRecord::Schema.define(version: 2021_11_07_015813) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -68,6 +68,12 @@ ActiveRecord::Schema.define(version: 2021_11_07_014612) do
     t.string "language"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "people_id", null: false
+    t.integer "planets_id", null: false
+    t.integer "films_id", null: false
+    t.index ["films_id"], name: "index_species_on_films_id"
+    t.index ["people_id"], name: "index_species_on_people_id"
+    t.index ["planets_id"], name: "index_species_on_planets_id"
   end
 
   create_table "starships", force: :cascade do |t|
@@ -111,6 +117,9 @@ ActiveRecord::Schema.define(version: 2021_11_07_014612) do
   add_foreign_key "films", "people", column: "people_id"
   add_foreign_key "films", "planets", column: "planets_id"
   add_foreign_key "films", "species"
+  add_foreign_key "species", "films", column: "films_id"
+  add_foreign_key "species", "people", column: "people_id"
+  add_foreign_key "species", "planets", column: "planets_id"
   add_foreign_key "starships", "films", column: "films_id"
   add_foreign_key "vehicles", "films", column: "films_id"
   add_foreign_key "vehicles", "people", column: "people_id"
