@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_02_223145) do
+ActiveRecord::Schema.define(version: 2021_11_05_000621) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 2021_11_02_223145) do
     t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "films_id", null: false
+    t.index ["films_id"], name: "index_starships_on_films_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
@@ -96,4 +98,5 @@ ActiveRecord::Schema.define(version: 2021_11_02_223145) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "starships", "films", column: "films_id"
 end
