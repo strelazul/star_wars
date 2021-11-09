@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_09_154405) do
+ActiveRecord::Schema.define(version: 2021_11_09_155950) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -40,6 +40,10 @@ ActiveRecord::Schema.define(version: 2021_11_09_154405) do
     t.string "skin_color"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "planet_id", null: false
+    t.integer "species_id", null: false
+    t.index ["planet_id"], name: "index_people_on_planet_id"
+    t.index ["species_id"], name: "index_people_on_species_id"
   end
 
   create_table "planets", force: :cascade do |t|
@@ -119,6 +123,8 @@ ActiveRecord::Schema.define(version: 2021_11_09_154405) do
   add_foreign_key "films", "people", column: "people_id"
   add_foreign_key "films", "planets", column: "planets_id"
   add_foreign_key "films", "species"
+  add_foreign_key "people", "planets"
+  add_foreign_key "people", "species"
   add_foreign_key "planets", "people", column: "people_id"
   add_foreign_key "species", "films", column: "films_id"
   add_foreign_key "species", "people", column: "people_id"
