@@ -10,7 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20_211_119_043_728) do
+=======
+ActiveRecord::Schema.define(version: 2021_11_19_042135) do
+
+>>>>>>> parent of 282b4b7... Added joint tables for person.
   create_table "films", force: :cascade do |t|
     t.string "title"
     t.integer "episode_id"
