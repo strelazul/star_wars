@@ -144,6 +144,4 @@ planets_data.each do |planet_data|
                       climate:         planet_data["climate"],
                       terrain:         planet_data["terrain"],
                       surface_water:   planet_data["surface_water"])
-  planet.id = planet_data["url"]
-  planet.save
 end
