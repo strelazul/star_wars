@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_09_155950) do
+ActiveRecord::Schema.define(version: 2021_11_19_034304) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -21,18 +21,25 @@ ActiveRecord::Schema.define(version: 2021_11_09_155950) do
     t.date "release_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "people_id", null: false
-    t.integer "species_id", null: false
-    t.integer "planets_id", null: false
+    t.integer "people_id"
+    t.integer "species_id"
+    t.integer "planets_id"
     t.index ["people_id"], name: "index_films_on_people_id"
     t.index ["planets_id"], name: "index_films_on_planets_id"
     t.index ["species_id"], name: "index_films_on_species_id"
   end
 
+  create_table "films_people", id: false, force: :cascade do |t|
+    t.integer "film_id", null: false
+    t.integer "person_id", null: false
+    t.index ["film_id", "person_id"], name: "index_films_people_on_film_id_and_person_id"
+    t.index ["person_id", "film_id"], name: "index_films_people_on_person_id_and_film_id"
+  end
+
   create_table "people", force: :cascade do |t|
     t.string "name"
     t.string "birth_year"
-    t.string "yey_color"
+    t.string "eye_color"
     t.string "gender"
     t.string "hair_color"
     t.integer "height"
@@ -40,8 +47,8 @@ ActiveRecord::Schema.define(version: 2021_11_09_155950) do
     t.string "skin_color"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "planet_id", null: false
-    t.integer "species_id", null: false
+    t.integer "planet_id"
+    t.integer "species_id"
     t.index ["planet_id"], name: "index_people_on_planet_id"
     t.index ["species_id"], name: "index_people_on_species_id"
   end
@@ -58,7 +65,7 @@ ActiveRecord::Schema.define(version: 2021_11_09_155950) do
     t.string "surface_water"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "people_id", null: false
+    t.integer "people_id"
     t.index ["people_id"], name: "index_planets_on_people_id"
   end
 
@@ -74,9 +81,9 @@ ActiveRecord::Schema.define(version: 2021_11_09_155950) do
     t.string "language"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "people_id", null: false
-    t.integer "planets_id", null: false
-    t.integer "films_id", null: false
+    t.integer "people_id"
+    t.integer "planets_id"
+    t.integer "films_id"
     t.index ["films_id"], name: "index_species_on_films_id"
     t.index ["people_id"], name: "index_species_on_people_id"
     t.index ["planets_id"], name: "index_species_on_planets_id"
@@ -85,6 +92,7 @@ ActiveRecord::Schema.define(version: 2021_11_09_155950) do
   create_table "starships", force: :cascade do |t|
     t.string "name"
     t.string "model"
+    t.string "starship_class"
     t.string "manufacturer"
     t.integer "cost_in_credits"
     t.float "length"
@@ -97,13 +105,14 @@ ActiveRecord::Schema.define(version: 2021_11_09_155950) do
     t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "films_id", null: false
+    t.integer "films_id"
     t.index ["films_id"], name: "index_starships_on_films_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
     t.string "name"
     t.string "model"
+    t.string "vehicle_class"
     t.string "manufacturer"
     t.string "length"
     t.string "const_in_credits"
@@ -114,8 +123,8 @@ ActiveRecord::Schema.define(version: 2021_11_09_155950) do
     t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "films_id", null: false
-    t.integer "people_id", null: false
+    t.integer "films_id"
+    t.integer "people_id"
     t.index ["films_id"], name: "index_vehicles_on_films_id"
     t.index ["people_id"], name: "index_vehicles_on_people_id"
   end
