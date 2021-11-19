@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_034304) do
+ActiveRecord::Schema.define(version: 2021_11_19_041850) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -34,6 +34,13 @@ ActiveRecord::Schema.define(version: 2021_11_19_034304) do
     t.integer "person_id", null: false
     t.index ["film_id", "person_id"], name: "index_films_people_on_film_id_and_person_id"
     t.index ["person_id", "film_id"], name: "index_films_people_on_person_id_and_film_id"
+  end
+
+  create_table "films_species", id: false, force: :cascade do |t|
+    t.integer "film_id", null: false
+    t.integer "species_id", null: false
+    t.index ["film_id", "species_id"], name: "index_films_species_on_film_id_and_species_id"
+    t.index ["species_id", "film_id"], name: "index_films_species_on_species_id_and_film_id"
   end
 
   create_table "people", force: :cascade do |t|
