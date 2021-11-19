@@ -1,0 +1,28 @@
+<h1>Testing DB loading</h1>
+
+<p>
+  <ul>
+    <% @people.each do |person| %>
+      <li>
+        <ul>
+          <% person.attributes.each do | key, value | %>
+            <li>
+              <%= key %>:
+              <% if value.kind_of?(Array) %>
+                <ul>
+                  <% value.each do | item | %>
+                    <li>
+                      <%= item %><br>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <%= value %><br>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+</p>
