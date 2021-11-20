@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_211_119_042_135) do
+ActiveRecord::Schema.define(version: 20_211_119_234_638) do
   create_table "films", force: :cascade do |t|
     t.string "title"
     t.integer "episode_id"
@@ -55,9 +55,37 @@ ActiveRecord::Schema.define(version: 20_211_119_042_135) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "planet_id"
-    t.integer "species_id"
     t.index ["planet_id"], name: "index_people_on_planet_id"
-    t.index ["species_id"], name: "index_people_on_species_id"
+  end
+
+  create_table "people_planets", id: false, force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "planet_id", null: false
+    t.index ["person_id", "planet_id"], name: "index_people_planets_on_person_id_and_planet_id"
+    t.index ["planet_id", "person_id"], name: "index_people_planets_on_planet_id_and_person_id"
+  end
+
+  create_table "people_species", id: false, force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "species_id", null: false
+    t.index ["person_id", "species_id"], name: "index_people_species_on_person_id_and_species_id"
+    t.index ["species_id", "person_id"], name: "index_people_species_on_species_id_and_person_id"
+  end
+
+  create_table "people_starships", id: false, force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "starship_id", null: false
+    t.index ["person_id", "starship_id"],
+            name: "index_people_starships_on_person_id_and_starship_id"
+    t.index ["starship_id", "person_id"],
+            name: "index_people_starships_on_starship_id_and_person_id"
+  end
+
+  create_table "people_vehicles", id: false, force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "vehicle_id", null: false
+    t.index ["person_id", "vehicle_id"], name: "index_people_vehicles_on_person_id_and_vehicle_id"
+    t.index ["vehicle_id", "person_id"], name: "index_people_vehicles_on_vehicle_id_and_person_id"
   end
 
   create_table "planets", force: :cascade do |t|
@@ -72,8 +100,6 @@ ActiveRecord::Schema.define(version: 20_211_119_042_135) do
     t.string "surface_water"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "people_id"
-    t.index ["people_id"], name: "index_planets_on_people_id"
   end
 
   create_table "species", force: :cascade do |t|
@@ -88,11 +114,7 @@ ActiveRecord::Schema.define(version: 20_211_119_042_135) do
     t.string "language"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "people_id"
     t.integer "planets_id"
-    t.integer "films_id"
-    t.index ["films_id"], name: "index_species_on_films_id"
-    t.index ["people_id"], name: "index_species_on_people_id"
     t.index ["planets_id"], name: "index_species_on_planets_id"
   end
 
@@ -112,8 +134,6 @@ ActiveRecord::Schema.define(version: 20_211_119_042_135) do
     t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "films_id"
-    t.index ["films_id"], name: "index_starships_on_films_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
@@ -130,22 +150,8 @@ ActiveRecord::Schema.define(version: 20_211_119_042_135) do
     t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "films_id"
-    t.integer "people_id"
-    t.index ["films_id"], name: "index_vehicles_on_films_id"
-    t.index ["people_id"], name: "index_vehicles_on_people_id"
   end
 
-  add_foreign_key "films", "people", column: "people_id"
-  add_foreign_key "films", "planets", column: "planets_id"
-  add_foreign_key "films", "species"
-  add_foreign_key "people", "planets"
-  add_foreign_key "people", "species"
-  add_foreign_key "planets", "people", column: "people_id"
-  add_foreign_key "species", "films", column: "films_id"
-  add_foreign_key "species", "people", column: "people_id"
+  add_foreign_key "people", "planets", column: "planets_id"
   add_foreign_key "species", "planets", column: "planets_id"
-  add_foreign_key "starships", "films", column: "films_id"
-  add_foreign_key "vehicles", "films", column: "films_id"
-  add_foreign_key "vehicles", "people", column: "people_id"
 end
