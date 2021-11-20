@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_211_119_234_638) do
+ActiveRecord::Schema.define(version: 2021_11_19_234638) do
+
   create_table "films", force: :cascade do |t|
     t.string "title"
     t.integer "episode_id"
@@ -58,27 +59,11 @@ ActiveRecord::Schema.define(version: 20_211_119_234_638) do
     t.index ["planet_id"], name: "index_people_on_planet_id"
   end
 
-  create_table "people_planets", id: false, force: :cascade do |t|
-    t.integer "person_id", null: false
-    t.integer "planet_id", null: false
-    t.index ["person_id", "planet_id"], name: "index_people_planets_on_person_id_and_planet_id"
-    t.index ["planet_id", "person_id"], name: "index_people_planets_on_planet_id_and_person_id"
-  end
-
-  create_table "people_species", id: false, force: :cascade do |t|
-    t.integer "person_id", null: false
-    t.integer "species_id", null: false
-    t.index ["person_id", "species_id"], name: "index_people_species_on_person_id_and_species_id"
-    t.index ["species_id", "person_id"], name: "index_people_species_on_species_id_and_person_id"
-  end
-
   create_table "people_starships", id: false, force: :cascade do |t|
     t.integer "person_id", null: false
     t.integer "starship_id", null: false
-    t.index ["person_id", "starship_id"],
-            name: "index_people_starships_on_person_id_and_starship_id"
-    t.index ["starship_id", "person_id"],
-            name: "index_people_starships_on_starship_id_and_person_id"
+    t.index ["person_id", "starship_id"], name: "index_people_starships_on_person_id_and_starship_id"
+    t.index ["starship_id", "person_id"], name: "index_people_starships_on_starship_id_and_person_id"
   end
 
   create_table "people_vehicles", id: false, force: :cascade do |t|
@@ -121,7 +106,6 @@ ActiveRecord::Schema.define(version: 20_211_119_234_638) do
   create_table "starships", force: :cascade do |t|
     t.string "name"
     t.string "model"
-    t.string "starship_class"
     t.string "manufacturer"
     t.integer "cost_in_credits"
     t.float "length"
@@ -139,7 +123,6 @@ ActiveRecord::Schema.define(version: 20_211_119_234_638) do
   create_table "vehicles", force: :cascade do |t|
     t.string "name"
     t.string "model"
-    t.string "vehicle_class"
     t.string "manufacturer"
     t.string "length"
     t.string "const_in_credits"
@@ -152,6 +135,6 @@ ActiveRecord::Schema.define(version: 20_211_119_234_638) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "people", "planets", column: "planets_id"
+  add_foreign_key "people", "planets"
   add_foreign_key "species", "planets", column: "planets_id"
 end
