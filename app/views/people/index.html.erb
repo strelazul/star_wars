@@ -2,27 +2,29 @@
 
 <p>
   <ul>
-    <% @people.each do |person| %>
+    <% @films.each do |film|
+        film.starships.reload
+    %>
       <li>
+        <b><%= film.title %></b>
         <ul>
-          <% person.attributes.each do | key, value | %>
-            <li>
-              <%= key %>:
-              <% if value.kind_of?(Array) %>
-                <ul>
-                  <% value.each do | item | %>
-                    <li>
-                      <%= item %><br>
-                    </li>
-                  <% end %>
-                </ul>
-              <% else %>
-                <%= value %><br>
-              <% end %>
-            </li>
-          <% end %>
+          <li>
+            id: <%= film.id %>
+          </li>
+          <li>
+            Opening Crawl: <%= film.opening_crawl %>
+          </li>
+          <li>
+            Starships:
+            <ul>
+              <li>
+                # of starships: <%= film.starship_ids %>
+              </li>
+            </ul>
+          </li>
         </ul>
       </li>
     <% end %>
   </ul>
+
 </p>
