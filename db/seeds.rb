@@ -147,3 +147,5 @@ planets_data.each do |planet_data|
   planet.id = planet_data["url"]
   planet.save
 end
+
+# Loop through data and stabilish all relations.
