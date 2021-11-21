@@ -140,7 +140,7 @@ ActiveRecord::Schema.define(version: 2021_11_21_013937) do
     t.string "model"
     t.string "manufacturer"
     t.string "length"
-    t.string "const_in_credits"
+    t.string "cost_in_credits"
     t.string "crew"
     t.string "passengers"
     t.string "max_atmosphering_speed"
