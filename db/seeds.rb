@@ -14,7 +14,7 @@ Species.destroy_all
 Planet.destroy_all
 
 def url?(str)
-  str =~ /\A#{URI::DE2167eFAULT_PARSER.make_regexp(['http', 'https'])}\z/
+  str =~ /\A#{URI::DEFAULT_PARSER.make_regexp(['http', 'https'])}\z/
 end
 
 def get_id(str)
@@ -137,7 +137,7 @@ planets_data = get_data("https://swapi.dev/api/planets")
 planets_data.each do |planet_data|
   planet = Planet.new(name:            planet_data["name"],
                       diameter:        planet_data["diameter"],
-                      rotation_period: planet_cata["rotation_period"],
+                      rotation_period: planet_data["rotation_period"],
                       orbital_period:  planet_data["orbital_period"],
                       gravity:         planet_data["gravity"],
                       population:      planet_data["population"],
@@ -148,4 +148,16 @@ planets_data.each do |planet_data|
   planet.save
 end
 
-# Loop through data and stabilish all relations.
+# Loop through each table data and stabilish all relations.
+films_data.each do |data|
+  film = Film.find(data["url"])
+  species = Species.where(id: data["species"])
+  film.species << species
+  vehicles = Vehicle.where(id: data["vehicles"])
+  film.vehicles << vehicles
+  characters = Person.where(id: data["characters"])
+  film.people << characters
+  planets = Planet.where(id: data["planets"])
+  film.planets << planets
+  film.save
+end
