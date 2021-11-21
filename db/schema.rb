@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_21_001335) do
+ActiveRecord::Schema.define(version: 2021_11_21_010421) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -132,6 +132,7 @@ ActiveRecord::Schema.define(version: 2021_11_21_001335) do
     t.string "consumables"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "starship_class"
   end
 
   create_table "vehicles", force: :cascade do |t|
