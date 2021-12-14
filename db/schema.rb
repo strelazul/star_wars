@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_21_013937) do
+ActiveRecord::Schema.define(version: 2021_12_13_235253) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
@@ -45,17 +45,17 @@ ActiveRecord::Schema.define(version: 2021_11_21_013937) do
   end
 
   create_table "films_starships", id: false, force: :cascade do |t|
-    t.integer "film_id"
-    t.integer "starship_id"
-    t.index ["film_id"], name: "index_films_starships_on_film_id"
-    t.index ["starship_id"], name: "index_films_starships_on_starship_id"
+    t.integer "film_id", null: false
+    t.integer "starship_id", null: false
+    t.index ["film_id", "starship_id"], name: "index_films_starships_on_film_id_and_starship_id"
+    t.index ["starship_id", "film_id"], name: "index_films_starships_on_starship_id_and_film_id"
   end
 
   create_table "films_vehicles", id: false, force: :cascade do |t|
-    t.integer "film_id"
-    t.integer "vehicle_id"
-    t.index ["film_id"], name: "index_films_vehicles_on_film_id"
-    t.index ["vehicle_id"], name: "index_films_vehicles_on_vehicle_id"
+    t.integer "film_id", null: false
+    t.integer "vehicle_id", null: false
+    t.index ["film_id", "vehicle_id"], name: "index_films_vehicles_on_film_id_and_vehicle_id"
+    t.index ["vehicle_id", "film_id"], name: "index_films_vehicles_on_vehicle_id_and_film_id"
   end
 
   create_table "people", force: :cascade do |t|
@@ -71,6 +71,13 @@ ActiveRecord::Schema.define(version: 2021_11_21_013937) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "planet_id"
     t.index ["planet_id"], name: "index_people_on_planet_id"
+  end
+
+  create_table "people_species", id: false, force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "species_id", null: false
+    t.index ["person_id", "species_id"], name: "index_people_species_on_person_id_and_species_id"
+    t.index ["species_id", "person_id"], name: "index_people_species_on_species_id_and_person_id"
   end
 
   create_table "people_starships", id: false, force: :cascade do |t|

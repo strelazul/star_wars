@@ -2,25 +2,15 @@
 
 <p>
   <ul>
-    <% @films.each do |film|
-        film.starships.reload
-    %>
+    <% @all_species.each do |species| %>
       <li>
-        <b><%= film.title %></b>
+        <b><%= species.name %></b>
         <ul>
           <li>
-            id: <%= film.id %>
+            id: <%= species.id %>
           </li>
           <li>
-            Opening Crawl: <%= film.opening_crawl %>
-          </li>
-          <li>
-            Starships:
-            <ul>
-              <li>
-                # of starships: <%= film.starship_ids %>
-              </li>
-            </ul>
+            Classification: <%= species.classification %>
           </li>
         </ul>
       </li>

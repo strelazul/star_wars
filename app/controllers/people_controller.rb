@@ -1,5 +1,6 @@
 class PeopleController < ApplicationController
   def index
-    @films = Film.includes([:starships, :vehicles]).all
+    @films = Film.includes([:vehicles]).all
+    @all_species = Species.all
   end
 end

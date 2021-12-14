@@ -6,6 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+require "json"
+require "net/http"
+
 Person.destroy_all
 Film.destroy_all
 Starship.destroy_all
@@ -25,7 +28,7 @@ end
 def url_to_id(json)
   json["results"].each do |person|
     person.each do |key, value|
-      if value.is_a?(Array)
+      if value.instance_of?(Array)
         value.each_index do |i|
           value[i] = get_id(value[i]) if url?(value[i])
         end
@@ -159,5 +162,22 @@ films_data.each do |data|
   film.people << characters
   planets = Planet.where(id: data["planets"])
   film.planets << planets
-  film.save
+  starships = Starship.where(id: data["starships"])
+  film.starships << starships
+end
+
+species_data.each do |data|
+  species = Species.find(data["url"])
+  planet = Planet.where(id: data["homeworld"])
+  species.planet << planet
+end
+
+people_data.each do |data|
+  person = Person.find(data["url"])
+  vehicles = Vehicle.where(id: data["vehicles"])
+  person.vehicles << vehicles
+  starships = Starship.where(id: data["starships"])
+  person.starships << starships
+  planet = Planet.where(id: data["homeworld"])
+  person.planet << planet
 end

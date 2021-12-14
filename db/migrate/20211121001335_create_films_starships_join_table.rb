@@ -1,8 +1,8 @@
 class CreateFilmsStarshipsJoinTable < ActiveRecord::Migration[6.1]
   def change
-    create_table :films_starships, id: false do |t|
-      t.belongs_to :film, index: true
-      t.belongs_to :starship, index: true
+    create_join_table :films, :starships do |t|
+      t.index %i[film_id starship_id]
+      t.index %i[starship_id film_id]
     end
   end
 end
