@@ -120,8 +120,8 @@ ActiveRecord::Schema.define(version: 2021_12_13_235253) do
     t.string "language"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "planets_id"
-    t.index ["planets_id"], name: "index_species_on_planets_id"
+    t.integer "planet_id"
+    t.index ["planet_id"], name: "index_species_on_planet_id"
   end
 
   create_table "starships", force: :cascade do |t|
@@ -159,5 +159,5 @@ ActiveRecord::Schema.define(version: 2021_12_13_235253) do
   end
 
   add_foreign_key "people", "planets"
-  add_foreign_key "species", "planets", column: "planets_id"
+  add_foreign_key "species", "planets"
 end

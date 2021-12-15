@@ -16,6 +16,10 @@ Vehicle.destroy_all
 Species.destroy_all
 Planet.destroy_all
 
+base_url = "https://www.swapi.tech/api/"
+# base_url = "http://swapi.py4e.com/api/"
+# base_url = "https://www.swapi.dev/api/"
+
 def url?(str)
   str =~ /\A#{URI::DEFAULT_PARSER.make_regexp(['http', 'https'])}\z/
 end
@@ -45,6 +49,7 @@ def get_data(url_str)
   until page_url.nil?
     uri = URI(page_url)
     response = Net::HTTP.get(uri)
+    puts "API response: #{response}"
     json = JSON.parse(response)
     data.concat(url_to_id(json))
     # call json.next
@@ -54,7 +59,7 @@ def get_data(url_str)
 end
 
 # People
-people_data = get_data("https://swapi.dev/api/people")
+people_data = get_data("#{base_url}people")
 people_data.each do |person_data|
   person = Person.new(name:       person_data["name"],
                       birth_year: person_data["birth_year"],
@@ -69,7 +74,7 @@ people_data.each do |person_data|
 end
 
 # Film
-films_data = get_data("https://swapi.dev/api/films")
+films_data = get_data("#{base_url}films")
 films_data.each do |film_data|
   film = Film.new(title:         film_data["title"],
                   episode_id:    film_data["episode_id"],
@@ -82,7 +87,7 @@ films_data.each do |film_data|
 end
 
 # Starships
-starships_data = get_data("https://swapi.dev/api/starships")
+starships_data = get_data("#{base_url}starships")
 starships_data.each do |starship_data|
   starship = Starship.new(name:                   starship_data["name"],
                           model:                  starship_data["model"],
@@ -102,7 +107,7 @@ starships_data.each do |starship_data|
 end
 
 # Vehicles
-vehicles_data = get_data("https://swapi.dev/api/vehicles")
+vehicles_data = get_data("#{base_url}vehicles")
 vehicles_data.each do |vehicle_data|
   vehicle = Vehicle.new(name:                   vehicle_data["name"],
                         model:                  vehicle_data["model"],
@@ -119,24 +124,8 @@ vehicles_data.each do |vehicle_data|
   vehicle.save
 end
 
-# Species
-species_data = get_data("https://swapi.dev/api/species")
-species_data.each do |spicie_data| # I know the singular for species is species...
-  species = Species.new(name:             spicie_data["name"],
-                        classification:   spicie_data["classiufication"],
-                        designation:      spicie_data["designation"],
-                        average_height:   spicie_data["average_height"],
-                        average_lifespan: spicie_data["average_lifespan"],
-                        eye_colors:       spicie_data["eye_colors"],
-                        hair_colors:      spicie_data["hair_colors"],
-                        skin_colors:      spicie_data["skin_colors"],
-                        language:         spicie_data["language"])
-  species.id = spicie_data["url"]
-  species.save
-end
-
 # Planets
-planets_data = get_data("https://swapi.dev/api/planets")
+planets_data = get_data("#{base_url}planets")
 planets_data.each do |planet_data|
   planet = Planet.new(name:            planet_data["name"],
                       diameter:        planet_data["diameter"],
@@ -149,6 +138,24 @@ planets_data.each do |planet_data|
                       surface_water:   planet_data["surface_water"])
   planet.id = planet_data["url"]
   planet.save
+end
+
+# Species
+species_data = get_data("#{base_url}species")
+species_data.each do |specie_data| # I know the singular for species is species...
+  planet = Planet.find(specie_data["homeworld"].to_i)
+  puts "#{planet.id} - #{planet.name}"
+  species = planet.species.build(name:             specie_data["name"],
+                                 classification:   specie_data["classification"],
+                                 designation:      specie_data["designation"],
+                                 average_height:   specie_data["average_height"],
+                                 average_lifespan: specie_data["average_lifespan"],
+                                 eye_colors:       specie_data["eye_colors"],
+                                 hair_colors:      specie_data["hair_colors"],
+                                 skin_colors:      specie_data["skin_colors"],
+                                 language:         specie_data["language"])
+  species.id = specie_data["url"]
+  species.save!
 end
 
 # Loop through each table data and stabilish all relations.
@@ -164,12 +171,6 @@ films_data.each do |data|
   film.planets << planets
   starships = Starship.where(id: data["starships"])
   film.starships << starships
-end
-
-species_data.each do |data|
-  species = Species.find(data["url"])
-  planet = Planet.where(id: data["homeworld"])
-  species.planet << planet
 end
 
 people_data.each do |data|
