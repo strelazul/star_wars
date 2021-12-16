@@ -1,8 +1,9 @@
 <div class="col-12">
   <h1>Films</h1>
-  <div class="col-12">
+  <p>Listed in release order</p>
+  <div class="col-12 d-flex flex-wrap">
     <% @films.each do |film| %>
-
+      <%= render "short_info", film: film%>
     <% end %>
   </div>
 </div>
