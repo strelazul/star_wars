@@ -16,8 +16,8 @@ Vehicle.destroy_all
 Species.destroy_all
 Planet.destroy_all
 
-base_url = "https://www.swapi.tech/api/"
-# base_url = "http://swapi.py4e.com/api/"
+# base_url = "https://www.swapi.tech/api/"
+base_url = "https://swapi.py4e.com/api/"
 # base_url = "https://www.swapi.dev/api/"
 
 def url?(str)
@@ -25,33 +25,64 @@ def url?(str)
 end
 
 def get_id(str)
-  split_str = str.split("/")
-  split_str[split_str.length - 1]
+  if url?(str)
+    split_str = str.split("/")
+    return split_str[split_str.length - 1]
+  end
+  str
 end
 
-def url_to_id(json)
-  json["results"].each do |person|
-    person.each do |key, value|
+def parse_fields(json)
+  json["results"].each do |item|
+    item.each do |key, value|
+      if value.instance_of?(Array)
+        value.each_index do |i|
+          value[i] = get_id(value[i])
+        end
+      end
+      item[key] = get_id(value)
+    end
+  end
+  json["results"]
+end
+
+def parse_fields_film(json)
+  properties = []
+  json["result"].each do |film|
+    properties = film["properties"]
+    properties.each do |key, value|
       if value.instance_of?(Array)
         value.each_index do |i|
           value[i] = get_id(value[i]) if url?(value[i])
         end
       end
-      person[key] = get_id(value) if url?(value)
+      properties[key] = get_id(value) if url?(value)
     end
   end
-  json["results"]
+  properties
 end
 
 def get_data(url_str)
   page_url = url_str
   data = []
   until page_url.nil?
+    response = Net::HTTP.get(URI(page_url))
+    json = JSON.parse(response)
+    data.concat(parse_fields(json))
+    # call json.next
+    page_url = json["next"]
+  end
+  data
+end
+
+def get_films_data(url_str)
+  page_url = url_str
+  data = []
+  until page_url.nil?
     uri = URI(page_url)
     response = Net::HTTP.get(uri)
-    puts "API response: #{response}"
     json = JSON.parse(response)
-    data.concat(url_to_id(json))
+    data.concat(parse_fields_film(json))
     # call json.next
     page_url = json["next"]
   end
@@ -59,25 +90,25 @@ def get_data(url_str)
 end
 
 # People
-people_data = get_data("#{base_url}people")
+people_data = get_data("#{base_url}people/")
 people_data.each do |person_data|
   person = Person.new(name:       person_data["name"],
                       birth_year: person_data["birth_year"],
                       eye_color:  person_data["eye_color"],
                       gender:     person_data["gender"],
                       hair_color: person_data["hair_color"],
-                      height:     person_data["height"],
-                      mass:       person_data["mass"],
+                      height:     person_data["height"].to_i,
+                      mass:       person_data["mass"].to_i,
                       skin_color: person_data["skin_color"])
   person.id = person_data["url"]
   person.save
 end
 
 # Film
-films_data = get_data("#{base_url}films")
+films_data = get_data("#{base_url}films/")
 films_data.each do |film_data|
   film = Film.new(title:         film_data["title"],
-                  episode_id:    film_data["episode_id"],
+                  episode_id:    film_data["episode_id"].to_i,
                   opening_crawl: film_data["opening_crawl"],
                   director:      film_data["director"],
                   producer:      film_data["producer"],
@@ -87,14 +118,14 @@ films_data.each do |film_data|
 end
 
 # Starships
-starships_data = get_data("#{base_url}starships")
+starships_data = get_data("#{base_url}starships/")
 starships_data.each do |starship_data|
   starship = Starship.new(name:                   starship_data["name"],
                           model:                  starship_data["model"],
                           starship_class:         starship_data["starship_class"],
                           manufacturer:           starship_data["manufacturer"],
-                          cost_in_credits:        starship_data["cost_in_credits"],
-                          length:                 starship_data["length"],
+                          cost_in_credits:        starship_data["cost_in_credits"].to_i,
+                          length:                 starship_data["length"].to_f,
                           crew:                   starship_data["crew"],
                           passengers:             starship_data["passengers"],
                           max_atmosphering_speed: starship_data["max_atmosphering_speed"],
@@ -107,7 +138,7 @@ starships_data.each do |starship_data|
 end
 
 # Vehicles
-vehicles_data = get_data("#{base_url}vehicles")
+vehicles_data = get_data("#{base_url}vehicles/")
 vehicles_data.each do |vehicle_data|
   vehicle = Vehicle.new(name:                   vehicle_data["name"],
                         model:                  vehicle_data["model"],
@@ -125,7 +156,7 @@ vehicles_data.each do |vehicle_data|
 end
 
 # Planets
-planets_data = get_data("#{base_url}planets")
+planets_data = get_data("#{base_url}planets/")
 planets_data.each do |planet_data|
   planet = Planet.new(name:            planet_data["name"],
                       diameter:        planet_data["diameter"],
@@ -141,8 +172,10 @@ planets_data.each do |planet_data|
 end
 
 # Species
-species_data = get_data("#{base_url}species")
+species_data = get_data("#{base_url}species/")
 species_data.each do |specie_data| # I know the singular for species is species...
+  next if specie_data["homeworld"].nil?
+
   planet = Planet.find(specie_data["homeworld"].to_i)
   puts "#{planet.id} - #{planet.name}"
   species = planet.species.build(name:             specie_data["name"],
@@ -154,8 +187,8 @@ species_data.each do |specie_data| # I know the singular for species is species.
                                  hair_colors:      specie_data["hair_colors"],
                                  skin_colors:      specie_data["skin_colors"],
                                  language:         specie_data["language"])
-  species.id = specie_data["url"]
-  species.save!
+  species.id = specie_data["url"].to_i
+  species.save
 end
 
 # Loop through each table data and stabilish all relations.

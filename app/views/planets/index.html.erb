@@ -1,0 +1,8 @@
+<div class="col-12">
+  <h1>Planets</h1>
+  <div class="col-12 d-flex flex-wrap">
+    <% @planets.each do |planet| %>
+      <%= render "short_info", planet: planet%>
+    <% end %>
+  </div>
+</div>
