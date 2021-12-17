@@ -3,12 +3,18 @@
     <h1>Star Wars</h1>
     <h2><%= @film.title %> </h2>
   </div>
-  <div class="col-lg-6 col-md-12 col-sm-12">
+  <div class="col-md-4 col-sm-12">
     <p>
       Episode <%= @film.episode_id %><br><br>
-      <%= @film.opening_crawl %>
-      Director: <%= @film. %>
+      <%= @film.opening_crawl %><br>
+      Director: <%= @film.director %><br>
+      Producer: <%= @film.producer %><br>
+      Release date: <%= @film.release_date %>
     </p>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+      <h3>Characters</h3>
+      <%= render "people/character_card", characters: @film.people %>
+    </div>
   </div>>
 </div>
 

@@ -174,6 +174,8 @@ end
 # Species
 species_data = get_data("#{base_url}species/")
 species_data.each do |specie_data| # I know the singular for species is species...
+  next if specie_data["homeworld"].nil?
+
   planet = Planet.find(specie_data["homeworld"].to_i)
   puts "#{planet.id} - #{planet.name}"
   species = planet.species.build(name:             specie_data["name"],
@@ -186,7 +188,7 @@ species_data.each do |specie_data| # I know the singular for species is species.
                                  skin_colors:      specie_data["skin_colors"],
                                  language:         specie_data["language"])
   species.id = specie_data["url"].to_i
-  species.save!
+  species.save
 end
 
 # Loop through each table data and stabilish all relations.

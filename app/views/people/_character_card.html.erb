@@ -1,0 +1,10 @@
+<% characters.each do |character| %>
+  <div class="col-lg-4 col-md-6 col-sm-12">
+    <h4><%= character.name %></h4>
+    <p>
+      Year of birth: <%= character.birth_year %>
+      Gender: <%= character.gender %>
+      Height: <%= character.height %>
+    </p>
+  </div>
+<% end %>
